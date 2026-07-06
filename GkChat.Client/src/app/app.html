@@ -1,0 +1,31 @@
+<main class="shell">
+  <section class="panel" aria-labelledby="page-title">
+    <div class="intro">
+      <p class="eyebrow">GkChat connectivity</p>
+      <h1 id="page-title">Ping the API</h1>
+      <p class="copy">
+        A tiny first slice for the chat app: the Angular client calls the .NET
+        backend and shows the response.
+      </p>
+    </div>
+
+    <div class="action-strip">
+      <button
+        type="button"
+        class="ping-button"
+        [disabled]="status() === 'loading'"
+        (click)="ping()"
+      >
+        {{ status() === 'loading' ? 'Pinging...' : 'Ping API' }}
+      </button>
+
+      <div class="status" [class.status--ok]="status() === 'success'" [class.status--error]="status() === 'error'">
+        {{ statusText() }}
+      </div>
+    </div>
+
+    <output class="result" [class.result--visible]="result()" aria-live="polite">
+      {{ result() || 'Awaiting pong' }}
+    </output>
+  </section>
+</main>

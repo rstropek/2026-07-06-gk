@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="GkChat.Api.Tests/GkChat.Api.Tests.csproj" />
+  <Project Path="GkChat.Api/GkChat.Api.csproj" />
+</Solution>
