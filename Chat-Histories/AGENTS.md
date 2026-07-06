@@ -1,0 +1,1 @@
+Dieser Ordner enthält historische Chat-Protokolle von verschiedenen Agenten. ACHTUNG: Diese Protokolle sind nicht unbedingt vollständig oder korrekt. Sie dienen nur als Referenz und sollten mit Vorsicht verwendet werden.
