@@ -1,31 +1,51 @@
 <main class="shell">
-  <section class="panel" aria-labelledby="page-title">
-    <div class="intro">
-      <p class="eyebrow">GkChat connectivity</p>
-      <h1 id="page-title">Ping the API</h1>
-      <p class="copy">
-        A tiny first slice for the chat app: the Angular client calls the .NET
-        backend and shows the response.
-      </p>
-    </div>
-
-    <div class="action-strip">
-      <button
-        type="button"
-        class="ping-button"
-        [disabled]="pingResource.isLoading()"
-        (click)="ping()"
-      >
-        {{ pingResource.isLoading() ? 'Pinging...' : 'Ping API' }}
-      </button>
-
-      <div class="status" [class.status--ok]="isConnected()" [class.status--error]="isError()">
-        {{ statusText() }}
+  <section class="chat" aria-labelledby="page-title">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">AG-UI live</p>
+        <h1 id="page-title">GkChat</h1>
       </div>
+      <div class="status" [class.status--busy]="isSending()" [class.status--error]="error()">
+        {{ error() || (isSending() ? 'Streaming' : 'Ready') }}
+      </div>
+    </header>
+
+    <div class="history" aria-label="Chat history" aria-live="polite">
+      @if (!hasMessages()) {
+        <div class="empty-state">
+          <span>GkChat</span>
+        </div>
+      }
+
+      @for (message of messages(); track message.id) {
+        <article
+          class="message"
+          [class.message--user]="message.role === 'user'"
+          [class.message--agent]="message.role === 'assistant'"
+          [class.message--streaming]="message.status === 'streaming'"
+          [class.message--error]="message.status === 'error'"
+        >
+          <div class="message__meta">
+            {{ message.role === 'user' ? 'You' : 'Agent' }}
+          </div>
+          <div class="message__content" [innerHTML]="(message.content || '...') | markdown"></div>
+        </article>
+      }
     </div>
 
-    <output class="result" [class.result--visible]="result()" aria-live="polite">
-      {{ result() || 'Awaiting pong' }}
-    </output>
+    <form class="composer" (submit)="handleSubmit($event)">
+      <label class="sr-only" for="chat-input">Message</label>
+      <textarea
+        id="chat-input"
+        class="composer__input"
+        rows="1"
+        [formField]="composerForm.text"
+        [attr.aria-busy]="isSending()"
+        (keydown)="handleComposerKeydown($event)"
+      ></textarea>
+      <button type="submit" class="composer__send" [disabled]="!canSend()">
+        Send
+      </button>
+    </form>
   </section>
 </main>

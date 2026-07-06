@@ -1,44 +1,50 @@
 import { Component, computed, inject, signal } from "@angular/core";
-import { rxResource } from "@angular/core/rxjs-interop";
-import { PingService } from "./api-client";
+import { FormField, form } from "@angular/forms/signals";
+import { ChatService } from "./chat.service";
+import { MarkdownPipe } from "./markdown.pipe";
 
 @Component({
   selector: "app-root",
+  imports: [FormField, MarkdownPipe],
   templateUrl: "./app.html",
   styleUrl: "./app.css",
 })
 export class App {
-  readonly #pingService = inject(PingService);
-  readonly #pingRequest = signal<number | undefined>(undefined);
+  readonly #chat = inject(ChatService);
 
-  protected readonly pingResource = rxResource({
-    params: () => this.#pingRequest(),
-    stream: () => this.#pingService.ping(),
+  protected readonly composerModel = signal({
+    text: "",
   });
-  protected readonly result = computed(() =>
-    this.pingResource.hasValue() ? this.pingResource.value() : "",
+  protected readonly composerForm = form(this.composerModel);
+  protected readonly messages = this.#chat.messages;
+  protected readonly isSending = this.#chat.isSending;
+  protected readonly error = this.#chat.error;
+  protected readonly hasMessages = this.#chat.hasMessages;
+  protected readonly canSend = computed(
+    () => this.composerModel().text.trim().length > 0 && !this.isSending(),
   );
-  protected readonly isConnected = computed(() => {
-    const status = this.pingResource.status();
-    return status === "resolved" || status === "local";
-  });
-  protected readonly isError = computed(() => this.pingResource.status() === "error");
-  protected readonly statusText = computed(() => {
-    switch (this.pingResource.status()) {
-      case "loading":
-      case "reloading":
-        return "Connecting...";
-      case "resolved":
-      case "local":
-        return "Connected";
-      case "error":
-        return "Connection failed";
-      default:
-        return "Ready";
-    }
-  });
 
-  protected ping(): void {
-    this.#pingRequest.update((request) => (request ?? 0) + 1);
+  protected handleSubmit(event: SubmitEvent): void {
+    event.preventDefault();
+    void this.send();
+  }
+
+  protected handleComposerKeydown(event: KeyboardEvent): void {
+    if (event.key !== "Enter" || event.shiftKey) {
+      return;
+    }
+
+    event.preventDefault();
+    void this.send();
+  }
+
+  protected async send(): Promise<void> {
+    const text = this.composerModel().text.trim();
+    if (!text || this.isSending()) {
+      return;
+    }
+
+    this.composerModel.set({ text: "" });
+    await this.#chat.send(text);
   }
 }

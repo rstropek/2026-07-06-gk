@@ -10,3 +10,88 @@ html {
 body {
   margin: 0;
 }
+
+.message__content :is(p, ul, ol, pre, blockquote, table) {
+  margin: 0 0 0.85rem;
+}
+
+.message__content :is(p, ul, ol, pre, blockquote, table):last-child {
+  margin-bottom: 0;
+}
+
+.message__content :is(ul, ol) {
+  padding-left: 1.4rem;
+}
+
+.message__content li + li {
+  margin-top: 0.25rem;
+}
+
+.message__content a {
+  color: #4a006d;
+  font-weight: 850;
+}
+
+.message__content code {
+  border: 2px solid rgba(23, 0, 22, 0.36);
+  border-radius: 6px;
+  padding: 0.08rem 0.32rem;
+  background: rgba(255, 255, 255, 0.76);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.92em;
+}
+
+.message__content pre {
+  overflow-x: auto;
+  border: 2px solid #170016;
+  border-radius: 8px;
+  padding: 0.85rem;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.message__content pre code {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.message__content blockquote {
+  border-left: 0.35rem solid #170016;
+  padding: 0.15rem 0 0.15rem 0.85rem;
+  color: #3d0039;
+}
+
+.message__content table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 2px solid #170016;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.message__content th,
+.message__content td {
+  min-width: 7rem;
+  padding: 0.65rem 0.8rem;
+  border-right: 2px solid #170016;
+  border-bottom: 2px solid #170016;
+  text-align: left;
+  vertical-align: top;
+}
+
+.message__content th {
+  background: #ffffff;
+  font-weight: 950;
+}
+
+.message__content tr:last-child td {
+  border-bottom: 0;
+}
+
+.message__content :is(th, td):last-child {
+  border-right: 0;
+}

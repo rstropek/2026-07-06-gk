@@ -57,7 +57,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
+                  "maximumWarning": "650kB",
                   "maximumError": "1MB"
                 },
                 {
@@ -79,6 +79,17 @@
               "extractLicenses": false,
               "sourceMap": true
             },
+            "e2e": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.ts"
+                }
+              ],
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            },
             "staging": {
               "fileReplacements": [
                 {
@@ -89,7 +100,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
+                  "maximumWarning": "650kB",
                   "maximumError": "1MB"
                 },
                 {
@@ -111,6 +122,9 @@
             },
             "development": {
               "buildTarget": "GkChat.Client:build:development"
+            },
+            "e2e": {
+              "buildTarget": "GkChat.Client:build:e2e"
             },
             "staging": {
               "buildTarget": "GkChat.Client:build:staging"
