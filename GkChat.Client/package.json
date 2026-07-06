@@ -4,7 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:staging": "ng serve --configuration staging",
+    "api:spec": "dotnet build ../GkChat.Api/GkChat.Api.csproj",
+    "api:generate": "npm run api:spec && ng-openapi -c openapi.config.ts",
     "build": "ng build",
+    "build:staging": "ng build --configuration staging",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
     "lint": "biome lint .",
     "format": "biome format --write .",
@@ -33,6 +37,7 @@
     "@angular/compiler-cli": "^22.0.0",
     "@biomejs/biome": "^2.5.2",
     "@playwright/test": "^1.61.1",
+    "ng-openapi": "^0.3.0",
     "typescript": "~6.0.2"
   }
 }

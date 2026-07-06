@@ -6,6 +6,8 @@ import {
 } from "@angular/core";
 import { provideRouter } from "@angular/router";
 
+import { environment } from "../environments/environment";
+import { provideGkChatClient } from "./api-client";
 import { routes } from "./app.routes";
 
 export const appConfig: ApplicationConfig = {
@@ -13,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideHttpClient(),
+    provideGkChatClient({ basePath: environment.apiBaseUrl }),
     provideRouter(routes),
   ],
 };

@@ -1,9 +1,6 @@
-import { HttpClient } from "@angular/common/http";
 import { Component, computed, inject, signal } from "@angular/core";
-
-const pingUrl = "http://localhost:5179/ping";
-
-type PingStatus = "idle" | "loading" | "success" | "error";
+import { rxResource } from "@angular/core/rxjs-interop";
+import { PingService } from "./api-client";
 
 @Component({
   selector: "app-root",
@@ -11,15 +8,28 @@ type PingStatus = "idle" | "loading" | "success" | "error";
   styleUrl: "./app.css",
 })
 export class App {
-  readonly #httpClient = inject(HttpClient);
+  readonly #pingService = inject(PingService);
+  readonly #pingRequest = signal<number | undefined>(undefined);
 
-  protected readonly result = signal("");
-  protected readonly status = signal<PingStatus>("idle");
+  protected readonly pingResource = rxResource({
+    params: () => this.#pingRequest(),
+    stream: () => this.#pingService.ping(),
+  });
+  protected readonly result = computed(() =>
+    this.pingResource.hasValue() ? this.pingResource.value() : "",
+  );
+  protected readonly isConnected = computed(() => {
+    const status = this.pingResource.status();
+    return status === "resolved" || status === "local";
+  });
+  protected readonly isError = computed(() => this.pingResource.status() === "error");
   protected readonly statusText = computed(() => {
-    switch (this.status()) {
+    switch (this.pingResource.status()) {
       case "loading":
+      case "reloading":
         return "Connecting...";
-      case "success":
+      case "resolved":
+      case "local":
         return "Connected";
       case "error":
         return "Connection failed";
@@ -29,17 +39,6 @@ export class App {
   });
 
   protected ping(): void {
-    this.status.set("loading");
-    this.result.set("");
-
-    this.#httpClient.get(pingUrl, { responseType: "text" }).subscribe({
-      next: (response) => {
-        this.result.set(response);
-        this.status.set("success");
-      },
-      error: () => {
-        this.status.set("error");
-      },
-    });
+    this.#pingRequest.update((request) => (request ?? 0) + 1);
   }
 }

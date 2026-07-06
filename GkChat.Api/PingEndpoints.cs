@@ -20,7 +20,9 @@ public static class PingEndpoints
             _ = app.MapGet(
                     "/ping",
                     static () => Results.Text(PongResponse, MediaTypeNames.Text.Plain))
-                .WithName("Ping");
+                .WithName("Ping")
+                .WithTags("Ping")
+                .Produces<string>(StatusCodes.Status200OK, MediaTypeNames.Text.Plain);
 
             return app;
         }

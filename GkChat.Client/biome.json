@@ -13,6 +13,7 @@
       "playwright.config.ts",
       "src/**/*.css",
       "src/**/*.ts",
+      "!src/app/api-client",
       "e2e/**/*.ts"
     ]
   },

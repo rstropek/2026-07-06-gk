@@ -13,13 +13,13 @@
       <button
         type="button"
         class="ping-button"
-        [disabled]="status() === 'loading'"
+        [disabled]="pingResource.isLoading()"
         (click)="ping()"
       >
-        {{ status() === 'loading' ? 'Pinging...' : 'Ping API' }}
+        {{ pingResource.isLoading() ? 'Pinging...' : 'Ping API' }}
       </button>
 
-      <div class="status" [class.status--ok]="status() === 'success'" [class.status--error]="status() === 'error'">
+      <div class="status" [class.status--ok]="isConnected()" [class.status--error]="isError()">
         {{ statusText() }}
       </div>
     </div>
